@@ -20,7 +20,7 @@ namespace WebAPIDemo.Controllers
         //}
 
         [HttpGet]
-        public HttpResponseMessage Get(string gender="All")
+        public HttpResponseMessage Get([FromUri]string gender="All")
         {
             using (EmployeeDBEntities entities = new EmployeeDBEntities())
             {
@@ -43,7 +43,7 @@ namespace WebAPIDemo.Controllers
         }
 
         [HttpGet]
-        public HttpResponseMessage GetEmployeeById(int id)
+        public HttpResponseMessage GetEmployeeById([FromUri]int id)
         {
             using (EmployeeDBEntities entities = new EmployeeDBEntities())
             {
@@ -83,7 +83,7 @@ namespace WebAPIDemo.Controllers
             }
         }
 
-        public HttpResponseMessage Delete(int id)
+        public HttpResponseMessage Delete([FromUri]int id)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace WebAPIDemo.Controllers
             }
         }
 
-        public HttpResponseMessage Put(int id, [FromBody]Employee employee)
+        public HttpResponseMessage Put([FromUri]int id, [FromBody]Employee employee)
         {
             try
             {
