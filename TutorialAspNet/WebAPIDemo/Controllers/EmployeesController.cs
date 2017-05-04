@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using EmployeeDataAccess;
+using System.Threading;
 
 namespace WebAPIDemo.Controllers
 {
@@ -19,16 +20,39 @@ namespace WebAPIDemo.Controllers
         //    }
         //}
 
+        //[HttpGet]
+        //public HttpResponseMessage Get([FromUri]string gender="All")
+        //{
+        //    using (EmployeeDBEntities entities = new EmployeeDBEntities())
+        //    {
+        //        switch (gender.ToLower())
+        //        {
+        //            case "all":
+        //                return Request.CreateResponse(HttpStatusCode.OK,
+        //                    entities.Employees.ToList());
+        //            case "male":
+        //                return Request.CreateResponse(HttpStatusCode.OK,
+        //                    entities.Employees.Where(e => e.Gender.ToLower() == "male").ToList());
+        //            case "female":
+        //                return Request.CreateResponse(HttpStatusCode.OK,
+        //                    entities.Employees.Where(e => e.Gender.ToLower() == "female").ToList());
+        //            default:
+        //                return Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+        //                    "Value for gender must be All, Male or Female. " + gender + " is invalid.");
+        //        }
+        //    }
+        //}
+
         [HttpGet]
-        public HttpResponseMessage Get([FromUri]string gender="All")
+        [BasicAuthentication]
+        public HttpResponseMessage Get(string gender = "All")
         {
+            string username = Thread.CurrentPrincipal.Identity.Name;
+
             using (EmployeeDBEntities entities = new EmployeeDBEntities())
             {
-                switch (gender.ToLower())
+                switch (username.ToLower())
                 {
-                    case "all":
-                        return Request.CreateResponse(HttpStatusCode.OK,
-                            entities.Employees.ToList());
                     case "male":
                         return Request.CreateResponse(HttpStatusCode.OK,
                             entities.Employees.Where(e => e.Gender.ToLower() == "male").ToList());
@@ -36,8 +60,7 @@ namespace WebAPIDemo.Controllers
                         return Request.CreateResponse(HttpStatusCode.OK,
                             entities.Employees.Where(e => e.Gender.ToLower() == "female").ToList());
                     default:
-                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                            "Value for gender must be All, Male or Female. " + gender + " is invalid.");
+                        return Request.CreateResponse(HttpStatusCode.BadRequest);
                 }
             }
         }
